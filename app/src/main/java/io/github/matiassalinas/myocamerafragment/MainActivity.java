@@ -1,6 +1,7 @@
 package io.github.matiassalinas.myocamerafragment;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +27,7 @@ import com.github.florent37.camerafragment.widgets.CameraSwitchView;
 import com.github.florent37.camerafragment.widgets.FlashSwitchView;
 import com.github.florent37.camerafragment.widgets.MediaActionSwitchView;
 import com.github.florent37.camerafragment.widgets.RecordButton;
+import com.thalmic.myo.scanner.ScanActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -68,6 +71,23 @@ public class MainActivity extends AppCompatActivity {
                 Toast.LENGTH_LONG).show();
         ButterKnife.bind(this);
     }
+
+    public void myo(CameraFragmentApi cameraFragment){
+        Button myoBtn = (Button) findViewById(R.id.myoBtn);
+        Myo myoDevice = new Myo(myoBtn,cameraFragment,this);
+        if(myoDevice.hubReady()){
+            myoBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getBaseContext(), ScanActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+
+    }
+
+    /*  CAMERA    */
 
     @OnClick(R.id.flash_switch_view)
     public void onFlashSwitcClicked() {
@@ -184,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
                 .commitAllowingStateLoss();
 
         if (cameraFragment != null) {
+
             //cameraFragment.setResultListener(new CameraFragmentResultListener() {
             //    @Override
             //    public void onVideoRecorded(String filePath) {
@@ -331,10 +352,12 @@ public class MainActivity extends AppCompatActivity {
                     recordDurationText.setVisibility(visible ? View.VISIBLE : View.GONE);
                 }
             });
+
+            myo(cameraFragment);
         }
     }
 
-    private CameraFragmentApi getCameraFragment() {
+    public CameraFragmentApi getCameraFragment() {
         return (CameraFragmentApi) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
     }
 }

@@ -70,6 +70,19 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true">
 
+            <Button
+                android:id="@+id/myoBtn"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="26dp"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:fontFamily="sans-serif"
+                android:text="MYO"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+
             <com.github.florent37.camerafragment.widgets.RecordButton
                 android:id="@+id/record_button"
                 android:layout_width="75dp"

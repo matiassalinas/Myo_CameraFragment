@@ -31,4 +31,13 @@ dependencies {
     //Camera
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.github.florent37:CameraFragment:v1.0.5'
+
+    //Myo
+    repositories {
+        maven {
+            url '../myorepository'
+        }
+    }
+
+    compile('com.thalmic:myosdk:0.10.+@aar')
 }
