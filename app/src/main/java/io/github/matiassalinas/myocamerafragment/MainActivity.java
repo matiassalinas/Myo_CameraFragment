@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.ActivityCompat;
@@ -31,7 +32,9 @@ import com.github.florent37.camerafragment.widgets.RecordButton;
 import com.thalmic.myo.scanner.ScanActivity;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -127,6 +130,12 @@ public class MainActivity extends AppCompatActivity {
     public void onRecordButtonClicked() {
         final CameraFragmentApi cameraFragment = getCameraFragment();
         if (cameraFragment != null) {
+            /*
+            Creo la carpeta MyoFiles, el nombre del archivo sera el timestamp, y lo guardo.
+             */
+            File imagesFolder = new File(Environment.getExternalStorageDirectory(), "MyoFiles");
+            imagesFolder.mkdirs();
+            String name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             cameraFragment.takePhotoOrCaptureVideo(new CameraFragmentResultAdapter() {
                                                        @Override
                                                        public void onVideoRecorded(String filePath) {
@@ -138,8 +147,8 @@ public class MainActivity extends AppCompatActivity {
                                                            Toast.makeText(getBaseContext(), "onPhotoTaken " + filePath, Toast.LENGTH_SHORT).show();
                                                        }
                                                    },
-                    "/storage/self/primary",
-                    "photo0");
+                    imagesFolder.getAbsolutePath(),
+                    name);
         }
     }
 

@@ -1,6 +1,7 @@
 package io.github.matiassalinas.myocamerafragment;
 
 import android.content.Context;
+import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.widget.Button;
 import android.widget.Toast;
@@ -13,6 +14,10 @@ import com.thalmic.myo.DeviceListener;
 import com.thalmic.myo.Hub;
 import com.thalmic.myo.Pose;
 import com.thalmic.myo.XDirection;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by matias on 03-06-17.
@@ -96,6 +101,12 @@ public class Myo {
     };
 
     private void tomarFoto(){
+        /*
+          Creo la carpeta MyoFiles, el nombre del archivo sera el timestamp, y lo guardo.
+        */
+        File imagesFolder = new File(Environment.getExternalStorageDirectory(), "MyoFiles");
+        imagesFolder.mkdirs();
+        String name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         cameraFragment.takePhotoOrCaptureVideo(new CameraFragmentResultAdapter() {
                                                    @Override
                                                    public void onVideoRecorded(String filePath) {
@@ -107,8 +118,8 @@ public class Myo {
                                                        Toast.makeText(context, "onPhotoTaken " + filePath, Toast.LENGTH_SHORT).show();
                                                    }
                                                },
-                "/storage/self/primary",
-                "photo0");
+                imagesFolder.getAbsolutePath(),
+                name);
     }
 
     public Myo(Button myoBtn,CameraFragmentApi cameraFragment, Context context) {
