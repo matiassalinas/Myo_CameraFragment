@@ -10,6 +10,7 @@ import android.support.annotation.RequiresPermission;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -60,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Bind(R.id.cameraLayout)
     View cameraLayout;
-    @Bind(R.id.addCameraButton)
-    View addCameraButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +69,25 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "MAIN",
                 Toast.LENGTH_LONG).show();
         ButterKnife.bind(this);
+        if (Build.VERSION.SDK_INT > 15) {
+            final String[] permissions = {
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE};
+
+            final List<String> permissionsToRequest = new ArrayList<>();
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                    permissionsToRequest.add(permission);
+                }
+            }
+            if (!permissionsToRequest.isEmpty()) {
+                ActivityCompat.requestPermissions(this, permissionsToRequest.toArray(new String[permissionsToRequest.size()]), REQUEST_CAMERA_PERMISSIONS);
+            } else addCamera();
+        } else {
+            addCamera();
+        }
     }
 
     public void myo(CameraFragmentApi cameraFragment){
@@ -141,28 +159,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.addCameraButton)
-    public void onAddCameraClicked() {
-        if (Build.VERSION.SDK_INT > 15) {
-            final String[] permissions = {
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE};
 
-            final List<String> permissionsToRequest = new ArrayList<>();
-            for (String permission : permissions) {
-                if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-                    permissionsToRequest.add(permission);
-                }
-            }
-            if (!permissionsToRequest.isEmpty()) {
-                ActivityCompat.requestPermissions(this, permissionsToRequest.toArray(new String[permissionsToRequest.size()]), REQUEST_CAMERA_PERMISSIONS);
-            } else addCamera();
-        } else {
-            addCamera();
-        }
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -184,8 +181,6 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresPermission(Manifest.permission.CAMERA)
     public void addCamera() {
-        addCameraButton.setVisibility(View.GONE);
-        cameraLayout.setVisibility(View.VISIBLE);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -205,19 +200,22 @@ public class MainActivity extends AppCompatActivity {
 
         if (cameraFragment != null) {
 
-            //cameraFragment.setResultListener(new CameraFragmentResultListener() {
-            //    @Override
-            //    public void onVideoRecorded(String filePath) {
-            //        Intent intent = PreviewActivity.newIntentVideo(MainActivity.this, filePath);
-            //        startActivityForResult(intent, REQUEST_PREVIEW_CODE);
-            //    }
-//
-            //    @Override
-            //    public void onPhotoTaken(byte[] bytes, String filePath) {
-            //        Intent intent = PreviewActivity.newIntentPhoto(MainActivity.this, filePath);
-            //        startActivityForResult(intent, REQUEST_PREVIEW_CODE);
-            //    }
-            //});
+            //Como el enfoque de la aplicacion es utilizar el Myo, no es necesario visualizacion de las fotos/videos
+            /*
+            cameraFragment.setResultListener(new CameraFragmentResultListener() {
+                @Override
+                public void onVideoRecorded(String filePath) {
+                    Intent intent = PreviewActivity.newIntentVideo(MainActivity.this, filePath);
+                    startActivityForResult(intent, REQUEST_PREVIEW_CODE);
+                }
+
+                @Override
+                public void onPhotoTaken(byte[] bytes, String filePath) {
+                    Intent intent = PreviewActivity.newIntentPhoto(MainActivity.this, filePath);
+                    startActivityForResult(intent, REQUEST_PREVIEW_CODE);
+                }
+            });
+            */
 
             cameraFragment.setStateListener(new CameraFragmentStateAdapter() {
 
@@ -288,13 +286,16 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onStopVideoRecord() {
+                    Log.d("VIDEO","FIN");
                     recordSizeText.setVisibility(View.GONE);
-                    //cameraSwitchView.setVisibility(View.VISIBLE);
+                    mediaActionSwitchView.setVisibility(View.VISIBLE);
                     settingsView.setVisibility(View.VISIBLE);
                 }
 
                 @Override
                 public void onStartVideoRecord(File outputFile) {
+                    Log.d("VIDEO","INICIO");
+                    mediaActionSwitchView.setVisibility(View.GONE);
                 }
             });
 

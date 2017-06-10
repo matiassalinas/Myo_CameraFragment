@@ -10,18 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <Button
-        android:id="@+id/addCameraButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        tools:visibility="gone"
-        android:text="Add camera" />
-
     <RelativeLayout
         android:id="@+id/cameraLayout"
-        android:visibility="gone"
-        tools:visibility="visible"
+        android:visibility="visible"
+        tools:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >

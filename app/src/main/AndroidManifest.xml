@@ -26,6 +26,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.github.florent37.camerafragment.PreviewActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
