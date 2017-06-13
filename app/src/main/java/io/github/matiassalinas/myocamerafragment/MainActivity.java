@@ -11,7 +11,6 @@ import android.support.annotation.RequiresPermission;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -41,6 +40,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/*
+CAMERA FRAGMENT Author: Florent Champigny http://www.florentchampigny.com/
+GITHUB: https://github.com/florent37/CameraFragment
+
+ESTA APLICACIÓN ES UNA ADAPTACION PARA UTILIZAR MYO ARMBAND.
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String FRAGMENT_TAG = "camera";
@@ -69,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toast.makeText(this, "MAIN",
-                Toast.LENGTH_LONG).show();
         ButterKnife.bind(this);
         if (Build.VERSION.SDK_INT > 15) {
             final String[] permissions = {
