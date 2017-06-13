@@ -295,7 +295,6 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onStopVideoRecord() {
-                    Log.d("VIDEO","FIN");
                     recordSizeText.setVisibility(View.GONE);
                     mediaActionSwitchView.setVisibility(View.VISIBLE);
                     settingsView.setVisibility(View.VISIBLE);
@@ -303,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onStartVideoRecord(File outputFile) {
-                    Log.d("VIDEO","INICIO");
+                    // Desactivo el cambio de video a foto
                     mediaActionSwitchView.setVisibility(View.GONE);
                 }
             });
